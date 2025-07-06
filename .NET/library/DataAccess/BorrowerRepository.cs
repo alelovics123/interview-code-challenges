@@ -1,4 +1,5 @@
 ﻿using OneBeyondApi.Model;
+using System.Linq;
 
 namespace OneBeyondApi.DataAccess
 {
@@ -12,6 +13,16 @@ namespace OneBeyondApi.DataAccess
             using (var context = new LibraryContext())
             {
                 var list = context.Borrowers
+                    .ToList();
+                return list;
+            }
+        }
+
+        public List<Borrower> GetOnLoan()
+        {
+            using (var context = new LibraryContext())
+            {
+                var list = context.Borrowers.Where(n=>n.BookStocks.Any(m=>m.LoanEndDate.GetValueOrDefault()<DateTime.Now))   
                     .ToList();
                 return list;
             }
