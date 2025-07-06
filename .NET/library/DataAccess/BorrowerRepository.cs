@@ -1,4 +1,6 @@
-﻿using OneBeyondApi.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using OneBeyondApi.Model;
+using OneBeyondApi.ViewModel;
 using System.Linq;
 
 namespace OneBeyondApi.DataAccess
@@ -18,11 +20,18 @@ namespace OneBeyondApi.DataAccess
             }
         }
 
-        public List<Borrower> GetOnLoan()
+        public List<BorrowerWithBook> GetOnLoan()
         {
             using (var context = new LibraryContext())
             {
-                var list = context.Borrowers.Where(n=>n.BookStocks.Any(m=>m.LoanEndDate.GetValueOrDefault()<DateTime.Now))   
+                var list = context.Borrowers.Where(n => n.BookStocks.Any()).Include(n => n.BookStocks).ThenInclude(n => n.Book).ThenInclude(n=>n.Author)
+                    .Select(n => new BorrowerWithBook 
+                    { 
+                        Books = n.BookStocks.Select(m => m.Book).ToList(),
+                        EmailAddress = n.EmailAddress,
+                        Id = n.Id,
+                        Name = n.Name 
+                    })
                     .ToList();
                 return list;
             }

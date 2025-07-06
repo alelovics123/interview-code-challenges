@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using OneBeyondApi.Configuartion;
 using OneBeyondApi.DataAccess;
 using OneBeyondApi.Model;
+using OneBeyondApi.ViewModel;
 
 namespace OneBeyondApi.Controllers
 {
@@ -24,7 +25,7 @@ namespace OneBeyondApi.Controllers
             _options = options;
         }
         [HttpGet]
-        public IList<Borrower> GetOnLoan()
+        public IList<BorrowerWithBook> GetOnLoan()
         {
             return _borrowerRepository.GetOnLoan();
         }
