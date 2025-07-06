@@ -39,7 +39,7 @@ namespace OneBeyondApi.DataAccess
                     return "Indeterminable";
                 }
                 var futureReservationsCount = context.FutureReservations.Count(m => m.Book.Id == bookId);
-                return futureReservationsCount.ToString() + " futre reservations. Copies of this book:" + stocks.Count()+". Likely available within"+(futureReservationsCount*daysPerFutureReservation);
+                return futureReservationsCount.ToString() + " futre reservations. Copies of this book:" + stocks.Count()+". Likely available within"+Math.Ceiling(((double)futureReservationsCount*daysPerFutureReservation)/stocks.Count());
             }
         }
 
